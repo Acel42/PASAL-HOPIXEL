@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>KALKULATOR PASAL HOPIXEL</title>
+<style>
+body{
+    font-family:Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+}
+h1{
+    margin-top:20px;
+}
+.container{
+    width:90%;
+    max-width:900px;
+    margin:auto;
+}
+select,button{
+    padding:10px;
+    margin:5px;
+    width:100%;
+    border:none;
+    border-radius:8px;
+}
+button{
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+button:hover{
+    background:#1d4ed8;
+}
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#1e293b;
+    border-radius:10px;
+}
+.footer{
+    margin-top:30px;
+    font-size:12px;
+    opacity:0.6;
+}
+</style>
+</head>
+<body>
+
+<h1>KALKULATOR PASAL HOPIXEL</h1>
+<div class="container">
+
+<select id="kategori">
+<option value="ringan">RINGAN</option>
+<option value="sedang">SEDANG</option>
+<option value="berat">BERAT</option>
+</select>
+
+<select id="pasal"></select>
+
+<button onclick="tambahPasal()">Tambah Pasal</button>
+<button onclick="resetData()">Reset</button>
+
+<div class="result" id="hasil">
+Total Denda: 0<br>
+Total Bulan: 0
+</div>
+
+<div class="footer">
+Author: PaceMarcel
+</div>
+
+</div>
+
+<script>
+
+const dataPasal = [
+
+/* ================= RINGAN ================= */
+/* =======================
+   RINGAN
+======================= */
+
+{kategori:"ringan", kode:"0.1", nama:"TIDAK MEMILIKI KELENGKAPAN BERKENDARAAN SEPERTI SIM,PLATE ", denda:5000, bulan:5},
+{kategori:"ringan", kode:"0.2", nama:"TIDAK MEMILIKI KTP", denda:5000, bulan:5},
+{kategori:"ringan", kode:"0.3", nama:"UPAYA MENYOGOK PETUGAS", denda:10000, bulan:5},
+{kategori:"ringan", kode:"0.4", nama:"MEMBAWA HEWAN YANG DILINDUNGI (PENYU DAN HIU)", denda:5000, bulan:5},
+{kategori:"ringan", kode:"0.5", nama:"MELAWAN ARAH JALUR JALAN", denda:5000, bulan:10},
+{kategori:"ringan", kode:"0.6", nama:"MENABRAK SESEORANG", denda:10000, bulan:10},
+{kategori:"ringan", kode:"0.7", nama:"MEMBUAT KERUSUHAN DIKERAMAIAN", denda:10000, bulan:10},
+{kategori:"ringan", kode:"0.8", nama:"BERADA DI ZONA MERAH", denda:8000, bulan:10},
+{kategori:"ringan", kode:"0.9", nama:"MELAKUKAN PENIPUAN TERHADAP WARGA", denda:15000, bulan:10},
+{kategori:"ringan", kode:"1", nama:"MEMBERIKAN INFORMASI PALSU", denda:10000, bulan:10},
+{kategori:"ringan", kode:"1.1", nama:"SENGAJA DAN TIDAK SENGAJA BERADA DI TKP PEPERANGAN", denda:10000, bulan:10},
+{kategori:"ringan", kode:"1.2", nama:"MENYALAHGUNAKAN PANGGILAN HOTLINE", denda:10000, bulan:10},
+{kategori:"ringan", kode:"1.3", nama:"TIDAK MELENGKAPI ATRIBUT BERKENDARA", denda:8000, bulan:10},
+{kategori:"ringan", kode:"1.4", nama:"MEMBUAT KEKERASAN TERHADAP WARGA (MEMUKUL DAN MENABRAK)", denda:10000, bulan:15},
+{kategori:"ringan", kode:"1.5", nama:"MENGGUNAKAN ATRIBUT KEPOLISIAN", denda:10000, bulan:20},
+{kategori:"ringan", kode:"1.6", nama:"MEMBAHAYAKAN SESEORANG / MERUSAK BARANG SESEORANG", denda:15000, bulan:20},
+{kategori:"ringan", kode:"1.7", nama:"MENGHAMBAT PENYELIDIKAN / PROSES INTROGASI", denda:8000, bulan:20},
+{kategori:"ringan", kode:"1.8", nama:"MELAKUKAN PERJUDIAN TEMPAT UMUM", denda:10000, bulan:20},
+{kategori:"ringan", kode:"1.9", nama:"MENGHINA FACTION", denda:20000, bulan:40},
+{kategori:"ringan", kode:"2", nama:"KETIDAKPEMILIKAN LIC SENJATA HUNTING", denda:20000, bulan:20},
+
+/* ================= SEDANG ================= */
+{kategori:"sedang", kode:"2.1", nama:"PENIPUAN TERHADAP WARGA", denda:15000, bulan:10},
+{kategori:"sedang", kode:"2.2", nama:"MEMBAWA BAHAN NARKOTIC SEPERTI CANABIS,BIBIT CANABIS,MICIN", denda:15000, bulan:10},
+{kategori:"sedang", kode:"2.3", nama:"PENGOLAHAN MARIJUANA,MICIN DAN SEGALA JENIS BAHAN NARKOTIC", denda:12000, bulan:10},
+{kategori:"sedang", kode:"2.4", nama:"MEMBAWA RED MONEY", denda:15000, bulan:10},
+{kategori:"sedang", kode:"2.5", nama:"KABUR DARI FEDERAL", denda:12000, bulan:10},
+{kategori:"sedang", kode:"2.6", nama:"PENCEMARAN NAMA BAIK", denda:15000, bulan:10},
+{kategori:"sedang", kode:"2.7", nama:"BEGAL / PERAMPOKAN WARGA", denda:20000, bulan:15},
+{kategori:"sedang", kode:"2.8", nama:"MENCURI KENDARAAN", denda:12000, bulan:15},
+{kategori:"sedang", kode:"2.9", nama:"MEMBAWA BARANG ILEGAL", denda:15000, bulan:15},
+{kategori:"sedang", kode:"3", nama:"MELAWAN PETUGAS", denda:15000, bulan:15},
+{kategori:"sedang", kode:"3.1", nama:"PENGEDARAAN NARKOTIC", denda:15000, bulan:15},
+{kategori:"sedang", kode:"3.2", nama:"PENGEDARAAN BARANG ILEGAL", denda:15000, bulan:20},
+{kategori:"sedang", kode:"3.3", nama:"MEMPROSES RED MONEY", denda:15000, bulan:20},
+{kategori:"sedang", kode:"3.4", nama:"MENGANGGU PETUGAS", denda:20000, bulan:30},
+
+/* ================= BERAT ================= */
+{kategori:"berat", kode:"3.5", nama:"SENJATA ILEGAL LARAS PENDEK", denda:15000, bulan:20},
+{kategori:"berat", kode:"3.6", nama:"RAMPOK WARUNG", denda:10000, bulan:20},
+{kategori:"berat", kode:"3.7", nama:"PEPERANGAN KELOMPOK", denda:20000, bulan:20},
+{kategori:"berat", kode:"3.8", nama:"MEMBANTU KRIMINAL", denda:15000, bulan:20},
+{kategori:"berat", kode:"3.9", nama:"PENEMBAKAN FACTION", denda:25000, bulan:20},
+{kategori:"berat", kode:"4", nama:"RAMPOK BANK BESAR", denda:15000, bulan:30},
+{kategori:"berat", kode:"4.1", nama:"SENJATA LARAS PANJANG", denda:25000, bulan:30},
+{kategori:"berat", kode:"4.2", nama:"PENYANDRAAN WARGA", denda:25000, bulan:30},
+{kategori:"berat", kode:"4.3", nama:"PENYANDRAAN FACTION", denda:35000, bulan:50},
+{kategori:"berat", kode:"4.4", nama:"MELECEHKAN WANITA", denda:30000, bulan:50},
+{kategori:"berat", kode:"4.5", nama:"MENYERANG FEDERAL", denda:30000, bulan:50},
+{kategori:"berat", kode:"4.6", nama:"EDAR SENJATA ILEGAL", denda:30000, bulan:50},
+{kategori:"berat", kode:"4.7", nama:"MEMBAWA 20 CLIP", denda:20000, bulan:50},
+{kategori:"berat", kode:"4.8", nama:"MEMBUAT SENJATA ILEGAL", denda:25000, bulan:120},
+{kategori:"berat", kode:"4.9", nama:"MEMBAWA 3 SENJATA ILEGAL", denda:50000, bulan:120},
+{kategori:"berat", kode:"5", nama:"MEMBAWA 300 MARIJUANA", denda:30000, bulan:120},
+{kategori:"berat", kode:"5.1", nama:"MEMBAWA 500 KANABIS", denda:25000, bulan:120},
+{kategori:"berat", kode:"5.2", nama:"MEMBAWA 10 VEST", denda:30000, bulan:120},
+{kategori:"berat", kode:"5.3", nama:"PENEMBAKAN MASSAL / TERORISME", denda:0, bulan:999},
+{kategori:"berat", kode:"5.4", nama:"KORUPSI", denda:0, bulan:999},
+
+];
+
+let totalDenda = 0;
+let totalBulan = 0;
+
+function loadPasal(){
+    const kategori = document.getElementById("kategori").value;
+    const select = document.getElementById("pasal");
+    select.innerHTML = "";
+
+    dataPasal.filter(p=>p.kategori===kategori)
+    .forEach(p=>{
+        let opt = document.createElement("option");
+        opt.value = p.kode;
+        opt.text = p.kode+" - "+p.nama;
+        select.appendChild(opt);
+    });
+}
+
+function tambahPasal(){
+    const kode = document.getElementById("pasal").value;
+    const pasal = dataPasal.find(p=>p.kode===kode);
+
+    totalDenda += pasal.denda;
+    totalBulan += pasal.bulan;
+
+    if(totalBulan>=999){
+        document.getElementById("hasil").innerHTML=
+        "⚖️ PENGADILAN / HUKUMAN MATI";
+    }else{
+        document.getElementById("hasil").innerHTML=
+        "Total Denda: "+totalDenda+
+        "<br>Total Bulan: "+totalBulan;
+    }
+}
+
+function resetData(){
+    totalDenda = 0;
+    totalBulan = 0;
+    document.getElementById("hasil").innerHTML=
+    "Total Denda: 0<br>Total Bulan: 0";
+}
+
+loadPasal();
+document.getElementById("kategori").addEventListener("change", loadPasal);
+
+</script>
+</body>
+</html>
